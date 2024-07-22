@@ -59,6 +59,10 @@ defined in linker script */
 	.weak	Reset_Handler
 	.type	Reset_Handler, %function
 Reset_Handler:
+/* Initialize the stackpointer. this is done automatically after a reset event, but
+ * this program is started by the bootloader and not a reset event. */
+    ldr    r1, =_estack
+    mov    sp, r1
   ldr   sp, =_estack    /* Atollic update: set stack pointer */
   
 /* Call the clock system initialization function.*/
@@ -229,6 +233,7 @@ g_pfnVectors:
 	.word	0
 	.word	0
 	.word	FPU_IRQHandler
+	.word	0x55AA11EE				// Reserved for OpenBLT Checksum
 
 /*******************************************************************************
 *
